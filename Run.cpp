@@ -435,6 +435,41 @@ void Gray_Crop(){
 }
 
 //_____________________________________________
+void skew () {
+    int n;
+    cout << "Please enter degree to skew right:\n";
+    cin >> n;
+
+    unsigned char img1[SIZE][SIZE];
+
+     for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            img1[i][j] = 255;
+        }
+        
+    }
+double rad = n * (M_PI/180.0); //convert from degree to radian
+double scale = 1 / (1 + tan(rad)); //shrink factor to fit the given image into output image
+double dist = 255 - scale * 255;//distance that will be white 
+
+for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            double x = j;
+            x *= scale;
+            x += dist;
+
+            img1[i][int(x)] = img[i][j];
+        }
+        dist -= ((256 - scale * 255) / 255);
+    }
+
+}
+
+
 //_____________________________________________
 //_____________________________________________
 

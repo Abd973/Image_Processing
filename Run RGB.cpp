@@ -3,6 +3,8 @@
 // Islam Mohammed Ahmed Ali - 20220059 - islmslm999@gmail.com
 
 #include <iostream>
+#include <cstring>
+#include <cmath>
 #include "bmplib.cpp"
 using namespace std;
 
@@ -514,14 +516,16 @@ void ShuffleRGB() {
 //_____________________________________________
 void BlurRGB(){
     unsigned char doubled_pixel{};
-
-    for(int s{0}; s < RGB; s++){
-        for (int i{0}; i < SIZE; i++){
-            for (int j{0}; j < SIZE; j++){
-                doubled_pixel = (image[i][j][s] + image[i + 1][j + 1][s] + image[i + 1][j][s] + image[i][j + 1][s]
-                                 + image[i - 1][j][s] + image[i][j - 1][s] + image[i + 1][j - 1][s] + image[i - 1][j + 1][s] +
-                                 image[i - 1][j - 1][s]) / 9;
-                image[i][j][s] = doubled_pixel;
+    // Takes average for each pixel with its all adjacent pixels
+    for (int i = 0; i < 2; ++i){
+        for(int s{0}; s < RGB; s++){
+            for (int i{0}; i < SIZE; i++){
+                for (int j{0}; j < SIZE; j++){
+                    doubled_pixel = (image[i][j][s] + image[i + 1][j + 1][s] + image[i + 1][j][s] + image[i][j + 1][s]
+                                    + image[i - 1][j][s] + image[i][j - 1][s] + image[i + 1][j - 1][s] + image[i - 1][j + 1][s] +
+                                    image[i - 1][j - 1][s]) / 9;
+                                    image[i][j][s] = doubled_pixel;
+                }
             }
         }
     }
@@ -542,12 +546,99 @@ void RGB_Crop(){
 }
 
 //_____________________________________________
+void Skew_V(){
+
+    int n;
+    cout << "Please enter degree to skew right:\n";
+    cin >> n;
+
+
+    unsigned char img1[SIZE][SIZE][RGB];
+    for (int color = 0; color < 3; ++color){
+    for (int i = 0; i < SIZE; ++i){
+    for (int j = 0; j < SIZE; ++j){
+       img1[i][j][color] = image[i][j][color];
+       image[i][j][color] = 255;
+    }
+    }
+    }
+
+    double rad = n * (M_PI/180.0);      //convert from degree to radian
+    double scale = 1 / (1 + tan(rad));  //shrink factor to fit the given image into output image
+    double dist = 255 - scale * 255;    //distance that will be white 
+    for (int color = 0; color < RGB; ++color){
+        for (int j = 0; j < SIZE; j++)
+        {
+            for (int i = 0; i < SIZE; i++)
+            {
+                double x = i;
+                x *= scale;
+                x += dist;
+
+                image[int(x)][j][color] = img1[i][j][color];
+            }
+            dist -= ((256 - scale * 255) / 255);
+        }
+
+        dist = 255 - scale * 255;
+    }
+}
+
+void Skew_H(){
+
+    int n;
+    cout << "Please enter degree to skew right:\n";
+    cin >> n;
+
+
+    unsigned char img1[SIZE][SIZE][RGB];
+    for (int color = 0; color < 3; ++color){
+    for (int i = 0; i < SIZE; ++i){
+    for (int j = 0; j < SIZE; ++j){
+       img1[i][j][color] = image[i][j][color];
+       image[i][j][color] = 255;
+    }
+    }
+    }
+
+    double rad = n * (M_PI/180.0);      //convert from degree to radian
+    double scale = 1 / (1 + tan(rad));  //shrink factor to fit the given image into output image
+    double dist = 255 - scale * 255;    //distance that will be white 
+    for (int color = 0; color < RGB; ++color){
+        for (int i = 0; i < SIZE; i++)
+        {
+            for (int j = 0; j < SIZE; j++)
+            {
+                double x = j;
+                x *= scale;
+                x += dist;
+
+                image[i][int(x)][color] = img1[i][j][color];
+            }
+            dist -= ((256 - scale * 255) / 255);
+        }
+
+        dist = 255 - scale * 255;
+    }
+
+    
+}
+
+void Skew() {
+    cout << "Skew (H)orizontally or (V)ertically\n";
+    char choice; cin >> choice;
+    if (choice == 'h' || 'H')
+        Skew_H();
+    else if (choice == 'v' || choice == 'V')
+        Skew_V();
+    else cout << "Not Defined Function!\n";
+}
 //_____________________________________________
 //_____________________________________________
 
 void menu(){
 
-    int FilterNo{};
+    string FilterNo{};
 
     while(true){
         cout << "1) Black & White Filter\n"
@@ -564,67 +655,67 @@ void menu(){
              << "12) Blur Image\n"
              << "13) Crop Image\n"
              << "14) Skew Image\n"
-             << "15) Save Image\n"
-             << "16) Exit\n"
+             << "S- Save Image\n"
+             << "0) Exit\n"
              << "___________________________________________________\n";
         cin >> FilterNo;
         cout << "___________________________________________________\n";
 
-        if(FilterNo == 1)
+        if(FilterNo == "1")
             RGB_Black_and_White_image();
 
-        else if(FilterNo == 2)
+        else if(FilterNo == "2")
             InvertRGB();
 
-        else if(FilterNo == 3)
+        else if(FilterNo == "3")
             MergeRGB();
 
-        else if(FilterNo == 4)
+        else if(FilterNo == "4")
             RGB_image_Flip();
 
-        else if(FilterNo == 5)
+        else if(FilterNo == "5")
             RotateRGB();
 
-        else if(FilterNo == 6)
+        else if(FilterNo == "6")
             RGB_Darken_and_Lighten();
 
-        else if(FilterNo == 7)
+        else if(FilterNo == "7")
             Detect_RGB_Image_Edges();
 
-        else if(FilterNo == 8)
+        else if(FilterNo == "8")
             Enlarge_RGB_Image();
 
-        else if(FilterNo == 9)
+        else if(FilterNo == "9")
             ShrinkRGB();
 
-        else if(FilterNo == 10)
+        else if(FilterNo == "10")
             RGB_Mirror();
 
-        else if(FilterNo == 11)
+        else if(FilterNo == "11")
             ShuffleRGB();
 
-        else if(FilterNo == 12)
+        else if(FilterNo == "12")
             BlurRGB();
 
-        else if(FilterNo == 13)
+        else if(FilterNo == "13")
             RGB_Crop();
 
-        else if(FilterNo == 14);
+        else if(FilterNo == "14")
+            Skew();
 
-
-        else if(FilterNo == 15){
+        else if(FilterNo == "S"  || FilterNo == "s"){
             saveImage();
             cout << "Image saved\n"
                  << "___________________________________________________\n";
             continue;
         }
 
-        else if(FilterNo == 16){
-            cout << "terminated\n"
+        else if(FilterNo == "0"){
+            cout << "Terminated\n"
                  << "___________________________________________________\n";
             break;
         }
-        cout << "filter applied\n"
+        cout << "Filter Applied\n"
              << "___________________________________________________\n";
     }
 

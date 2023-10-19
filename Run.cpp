@@ -3,6 +3,8 @@
 // Islam Mohammed Ahmed Ali - 20220059 - islmslm999@gmail.com
 
 #include <iostream>
+#include <cstring>
+#include <cmath>
 #include "bmplib.cpp"
 using namespace std;
 
@@ -75,7 +77,7 @@ void Merge(){
     // reading the image
     readGSBMP(imageFileName, img_to_merge);
 
-
+    // Takes average for every two pixels in the image we will merge
     for (int i = 0; i < SIZE; ++i){
         for (int j = 0; j < SIZE; ++j){
             unsigned char merged_pixel = (image[i][j] + img_to_merge[i][j]) / 2;
@@ -145,7 +147,7 @@ void Rotate(){
     else if (degree == 270) {
         for (int i{0}; i < SIZE; i++){
             for (int j{0}; j < SIZE; j++) {
-                image2[i][j] = image[SIZE - i - 1][SIZE - j - 1];
+                image2[i][j] = image[j][i];
             }
         }
     }
@@ -434,27 +436,26 @@ void Gray_Crop(){
                 image[i][j] = 255;
 }
 
-//_____________________________________________
-void skew () {
+//_____________________________________________Skew
+
+void Skew_H() {
     int n;
-    cout << "Please enter degree to skew right:\n";
+    cout << "Please enter degree to skew right: \n";
     cin >> n;
 
     unsigned char img1[SIZE][SIZE];
 
-     for (int i = 0; i < SIZE; i++)
-    {
-        for (int j = 0; j < SIZE; j++)
-        {
-            img1[i][j] = 255;
-        }
-        
+    for (int i = 0; i < SIZE; ++i){
+    for (int j = 0; j < SIZE; ++j){
+       img1[i][j] = image[i][j];
+       image[i][j] = 255;
     }
-double rad = n * (M_PI/180.0); //convert from degree to radian
-double scale = 1 / (1 + tan(rad)); //shrink factor to fit the given image into output image
-double dist = 255 - scale * 255;//distance that will be white 
+    }
+    double rad = n * (M_PI/180.0); //convert from degree to radian
+    double scale = 1 / (1 + tan(rad)); //shrink factor to fit the given image into output image
+    double dist = 255 - scale * 255;//distance that will be white 
 
-for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < SIZE; i++)
     {
         for (int j = 0; j < SIZE; j++)
         {
@@ -462,20 +463,63 @@ for (int i = 0; i < SIZE; i++)
             x *= scale;
             x += dist;
 
-            img1[i][int(x)] = img[i][j];
+            image[i][int(x)] = img1[i][j];
         }
         dist -= ((256 - scale * 255) / 255);
     }
 
 }
 
+void Skew_V() {
 
-//_____________________________________________
+    int n;
+    cout << "Please enter degree to skew right: \n";
+    cin >> n;
+
+    unsigned char img1[SIZE][SIZE];
+
+    for (int i = 0; i < SIZE; ++i){
+    for (int j = 0; j < SIZE; ++j){
+       img1[i][j] = image[i][j];
+       image[i][j] = 255;
+    }
+    }
+
+    double rad = n * (M_PI/180.0);      //convert from degree to radian
+    double scale = 1 / (1 + tan(rad));  //shrink factor to fit the given image into output image
+    double dist = 255 - scale * 255;    //distance that will be white 
+
+    for (int j = 0; j < SIZE; j++)
+    {
+        for (int i = 0; i < SIZE; i++)
+        {
+            double x = i;
+            x *= scale;
+            x += dist;
+
+            image[int(x)][j] = img1[i][j];
+        }
+        dist -= ((256 - scale * 255) / 255);
+    }
+
+    
+}
+
+void Skew() {
+    cout << "Skew (H)orizontally or (V)ertically\n";
+    char choice; cin >> choice;
+    if (choice == 'h' || 'H')
+        Skew_H();
+    else if (choice == 'v' || choice == 'V')
+        Skew_V();
+    else cout << "Not Defined Function!\n";
+}
+
 //_____________________________________________
 
 void menu(){
 
-    int FilterNo{};
+    string FilterNo{};
 
     while(true){
         cout << "1) Black & White Filter\n"
@@ -492,67 +536,67 @@ void menu(){
              << "12) Blur Image\n"
              << "13) Crop Image\n"
              << "14) Skew Image\n"
-             << "15) Save Image\n"
-             << "16) Exit\n"
+             << "S- Save Image\n"
+             << "0) Exit\n"
              << "___________________________________________________\n";
         cin >> FilterNo;
         cout << "___________________________________________________\n";
 
-        if(FilterNo == 1)
+        if(FilterNo == "1")
             Gray_to_Black_and_White_Image();
 
-        else if(FilterNo == 2)
+        else if(FilterNo == "2")
             Invert();
 
-        else if(FilterNo == 3)
+        else if(FilterNo == "3")
             Merge();
 
-        else if(FilterNo == 4)
+        else if(FilterNo == "4")
             Gray_Image_Flip();
 
-        else if(FilterNo == 5)
+        else if(FilterNo == "5")
             Rotate();
 
-        else if(FilterNo == 6)
+        else if(FilterNo == "6")
             Darken_and_Lighten();
 
-        else if(FilterNo == 7)
+        else if(FilterNo == "7")
             Detect_Gray_image_edge();
 
-        else if(FilterNo == 8)
+        else if(FilterNo == "8")
             Enlarge_Gray_Image();
 
-        else if(FilterNo == 9)
+        else if(FilterNo == "9")
             Shrink();
 
-        else if(FilterNo == 10)
+        else if(FilterNo == "10")
             Gray_Mirror();
 
-        else if(FilterNo == 11)
+        else if(FilterNo == "11")
             Shuffle();
 
-        else if(FilterNo == 12)
+        else if(FilterNo == "12")
             Blur();
 
-        else if(FilterNo == 13)
+        else if(FilterNo == "13")
             Gray_Crop();
 
-        else if(FilterNo == 14);
+        else if(FilterNo == "14")
+            Skew();
 
-
-        else if(FilterNo == 15){
+        else if(FilterNo == "s" || FilterNo == "S"){
             saveImage();
-            cout << "Image saved\n"
+            cout << "Image Saved\n"
                  << "___________________________________________________\n";
             continue;
         }
 
-        else if(FilterNo == 16){
-            cout << "terminated\n"
+        else if(FilterNo == "0"){
+            cout << "Terminated\n"
                  << "___________________________________________________\n";
             break;
         }
-        cout << "filter applied\n"
+        cout << "Filter Applied\n"
              << "___________________________________________________\n";
     }
 

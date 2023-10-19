@@ -1,6 +1,6 @@
-//Ibrahim Hassan Mohammed Hassan - 20210002 - ibrahimhassannamr@gmail.com
-// Abdulmalik Mahmoud Hussein - 20220205 - abdelmaleka011@gamil.com
-// Islam Mohammed Ahmed Ali - 20220059 - islmslm999@gmail.com
+// Ibrahim Hassan Mohammed Hassan - 20210002 - ibrahimhassannamr@gmail.com
+// Abdulmalik Mahmoud Hussein     - 20220205 - abdelmaleka011@gamil.com
+// Islam Mohammed Ahmed Ali       - 20220059 - islmslm999@gmail.com
 
 #include <iostream>
 #include <cstring>
@@ -714,6 +714,11 @@ void menu(){
             cout << "Terminated\n"
                  << "___________________________________________________\n";
             break;
+        }
+        else {
+            cout << "Not Defined Filter\n"
+            << "___________________________________________________\n";
+            continue;
         }
         cout << "Filter Applied\n"
              << "___________________________________________________\n";

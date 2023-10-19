@@ -1,6 +1,6 @@
-//Ibrahim Hassan Mohammed Hassan - 20210002 - ibrahimhassannamr@gmail.com
-// Abdulmalik Mahmoud Hussein - 20220205 - abdelmaleka011@gamil.com
-// Islam Mohammed Ahmed Ali - 20220059 - islmslm999@gmail.com
+// Ibrahim Hassan Mohammed Hassan - 20210002 - ibrahimhassannamr@gmail.com
+// Abdulmalik Mahmoud Hussein     - 20220205 - abdelmaleka011@gamil.com
+// Islam Mohammed Ahmed Ali       - 20220059 - islmslm999@gmail.com
 
 #include <iostream>
 #include <cstring>
@@ -147,12 +147,12 @@ void Rotate(){
     else if (degree == 270) {
         for (int i{0}; i < SIZE; i++){
             for (int j{0}; j < SIZE; j++) {
-                image2[j][i] = image[i][255-j];
+                image2[j][i] = image[i][255 - j];
             }
         }
     }
 
-    // applying the changes on the original image
+    // Applies the changes on the original image
     for (int i{0}; i < SIZE; i++){
         for (int j{0}; j < SIZE; j++){
             image[i][j] = image2[i][j];
@@ -405,6 +405,7 @@ void Shuffle() {
 void Blur(){
     unsigned char doubled_pixel{};
 
+    // Takes average for each pixel with its all adjacent pixels and repeat it twice
     for(int i{0}; i < SIZE; ++i){
         for (int j{0}; j < SIZE ; ++j){
             doubled_pixel = (image[i][j] + image[i + 1][j + 1] + image[i + 1][j] + image[i][j + 1]
@@ -451,9 +452,9 @@ void Skew_H() {
        image[i][j] = 255;
     }
     }
-    double rad = n * (M_PI/180.0); //convert from degree to radian
-    double scale = 1 / (1 + tan(rad)); //shrink factor to fit the given image into output image
-    double dist = 255 - scale * 255;//distance that will be white 
+    double rad = n * (M_PI/180.0);      //convert from degree to radian
+    double scale = 1 / (1 + tan(rad));  //shrink factor to fit the given image into output image
+    double dist = 255 - scale * 255;    //distance that will be white 
 
     for (int i = 0; i < SIZE; i++)
     {
@@ -596,8 +597,16 @@ void menu(){
                  << "___________________________________________________\n";
             break;
         }
+
+        else {cout << "Not Defined Filter\n"
+                  << "___________________________________________________\n";
+                  continue;
+                }
+
         cout << "Filter Applied\n"
              << "___________________________________________________\n";
+             
+        
     }
 
 }

@@ -122,7 +122,7 @@ void Rotate(){
     int degree{};
 
     // getting the rotate degree
-    cout << "Rotate (90), (180) or (270) degrees\n";
+    cout << "Rotate (90), (180) or (270) degrees\n";// clockwise rotation
     cin >> degree;
 
     // 90-degree rotation algorithm
@@ -143,11 +143,11 @@ void Rotate(){
         }
     }
 
-        // 270-degree rotation algorithm
+        // 270-degree rotation algorithm (90-degree counterclockwise )
     else if (degree == 270) {
         for (int i{0}; i < SIZE; i++){
             for (int j{0}; j < SIZE; j++) {
-                image2[i][j] = image[j][i];
+                image2[j][i] = image[i][255-j];
             }
         }
     }
